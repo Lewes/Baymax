@@ -1,6 +1,7 @@
 package com.ayanix.baymax;
 
-import com.ayanix.baymax.listeners.RoleListener;
+import com.ayanix.baymax.commands.IntroductionCommand;
+import com.ayanix.baymax.commands.RoleCommand;
 import discord4j.core.DiscordClient;
 import discord4j.core.DiscordClientBuilder;
 import discord4j.core.event.domain.message.MessageCreateEvent;
@@ -49,7 +50,8 @@ public class BaymaxDiscord
 	 */
 	public void registerListeners()
 	{
-		client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(new RoleListener(bot));
+		client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(new RoleCommand(bot));
+		client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(new IntroductionCommand(bot));
 	}
 
 }

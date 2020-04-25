@@ -1,8 +1,12 @@
 package com.ayanix.baymax;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Baymax - Developed by Lewes D. B. (Boomclaw).
@@ -12,9 +16,11 @@ public class BaymaxBoostrap
 {
 
 	@Getter
-	private static final Logger logger = LoggerFactory.getLogger(BaymaxBoostrap.class);
+	private static final Logger          logger    = LoggerFactory.getLogger(BaymaxBoostrap.class);
 	@Getter
-	private static       Baymax bot;
+	private static final ExecutorService executors = Executors.newCachedThreadPool(new ThreadFactoryBuilder().setNameFormat("Baymax %d").build());
+	@Getter
+	private static       Baymax          bot;
 
 	public static void main(String[] args)
 	{

@@ -10,12 +10,14 @@ public class Baymax
 {
 
 	@Getter
-	private BaymaxSettings settings;
+	private BaymaxSettings          settings;
 	@Getter
-	private BaymaxDiscord  discord;
+	private BaymaxDiscord           discord;
+	@Getter
+	private BaymaxPersistentStorage storage;
 
 	/**
-	 * Starts Baymax connectivity to Discord and loads settings.
+	 * Starts Baymax connectivity to Discord, and loads settings and storage.
 	 *
 	 * @return Whether or not the bot was successfully started.
 	 */
@@ -32,6 +34,8 @@ public class Baymax
 			BaymaxBoostrap.getLogger().error("Connection to Discord failed. Disabling Baymax.");
 			return false;
 		}
+
+		loadStorage();
 
 		return true;
 	}
@@ -65,6 +69,15 @@ public class Baymax
 		discord.registerListeners();
 
 		return true;
+	}
+
+	/**
+	 * Loads user data from file.
+	 */
+	public void loadStorage()
+	{
+		this.storage = new BaymaxPersistentStorage(this);
+		storage.loadAllData();
 	}
 
 }

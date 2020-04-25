@@ -82,6 +82,8 @@ public class BaymaxSettings
 		configuration.set("admins", Collections.singletonList("ADMIN_ROLE_ID"));
 		configuration.set("roles.science", Collections.singletonList("SCIENCE_ROLE_ID"));
 
+		configuration.set("channels.introduction", 0);
+
 		return save();
 	}
 
@@ -199,6 +201,14 @@ public class BaymaxSettings
 	public List<Long> getAdminRoles()
 	{
 		return configuration.getLongList("admins");
+	}
+
+	/**
+	 * @return The introduction channel ID
+	 */
+	public long getIntroductionChannel()
+	{
+		return configuration.getLong("channels.introduction", 0);
 	}
 
 }
