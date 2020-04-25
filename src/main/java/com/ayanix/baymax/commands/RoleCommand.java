@@ -1,7 +1,8 @@
-package com.ayanix.baymax.listeners;
+package com.ayanix.baymax.commands;
 
 import com.ayanix.baymax.Baymax;
 import com.ayanix.baymax.BaymaxBoostrap;
+import com.ayanix.baymax.BaymaxMessages;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.User;
 import discord4j.core.object.util.Snowflake;
@@ -16,12 +17,12 @@ import java.util.function.Consumer;
  * Baymax - Developed by Lewes D. B. (Boomclaw).
  * All rights reserved 2020.
  */
-public class RoleListener implements Consumer<MessageCreateEvent>
+public class RoleCommand implements Consumer<MessageCreateEvent>
 {
 
 	private final Baymax bot;
 
-	public RoleListener(Baymax bot)
+	public RoleCommand(Baymax bot)
 	{
 		this.bot = bot;
 	}
@@ -38,12 +39,15 @@ public class RoleListener implements Consumer<MessageCreateEvent>
 			return;
 		}
 
-		String message = messageOpt.get();
+		String message = messageOpt.get().toLowerCase();
 
-		if (!message.startsWith("!role"))
+		if (!message.startsWith("!role") && !message.startsWith("!society"))
 		{
 			return;
 		}
+
+		boolean society = message.startsWith("!society");
+		String  cmdName = society ? "society" : "role";
 
 		// fetch author
 		if (!event.getMessage().getAuthor().isPresent())
@@ -58,8 +62,15 @@ public class RoleListener implements Consumer<MessageCreateEvent>
 		if (!message.contains(" "))
 		{
 			event.getMessage().getChannel().subscribe(messageChannel -> {
-				messageChannel.createMessage("Hi " + author.getMention() + ". I'm Baymax. Your personal Southampton 2020 Discord assistant." + "\n" +
-						"I see you're trying to assign yourself a role. Type **!role <category>.**").subscribe();
+				if (!society)
+				{
+					messageChannel.createMessage(BaymaxMessages.getIntroduction(author) + "\n" +
+							"I see you're trying to assign yourself a role. Type **!role <category>**.").subscribe();
+				} else
+				{
+					messageChannel.createMessage(BaymaxMessages.getIntroduction(author) + "\n" +
+							"I see you're trying to join a society. Type **!society <society>**.").subscribe();
+				}
 			});
 
 			return;
@@ -75,8 +86,15 @@ public class RoleListener implements Consumer<MessageCreateEvent>
 		if (!roleId.isPresent())
 		{
 			event.getMessage().getChannel().subscribe(messageChannel -> {
-				messageChannel.createMessage(author.getMention() + ", I couldn't find the role " + requestedName + ".\n" +
-						"Type **!role <category>** to try again.").subscribe();
+				if (!society)
+				{
+					messageChannel.createMessage(author.getMention() + ", I couldn't find the role " + requestedName + ".\n" +
+							"Type **!" + cmdName + " <category>** to try again.").subscribe();
+				} else
+				{
+					messageChannel.createMessage(author.getMention() + ", I couldn't find the society " + requestedName + ".\n" +
+							"Type **!society <society>** to try again.").subscribe();
+				}
 			});
 
 			return;
@@ -121,7 +139,7 @@ public class RoleListener implements Consumer<MessageCreateEvent>
 									public void onComplete()
 									{
 										event.getMessage().getChannel().subscribe(messageChannel -> {
-											messageChannel.createMessage(author.getMention() + ", I've added you to the role **" + role.getName() + "**.").subscribe();
+											messageChannel.createMessage(author.getMention() + ", I've added you to the " + cmdName + " **" + role.getName() + "**.").subscribe();
 										});
 									}
 								});
@@ -155,7 +173,7 @@ public class RoleListener implements Consumer<MessageCreateEvent>
 									public void onComplete()
 									{
 										event.getMessage().getChannel().subscribe(messageChannel -> {
-											messageChannel.createMessage(author.getMention() + ", I've removed you from the role **" + role.getName() + "**.").subscribe();
+											messageChannel.createMessage(author.getMention() + ", I've removed you from the " + cmdName + " **" + role.getName() + "**.").subscribe();
 										});
 									}
 								});
