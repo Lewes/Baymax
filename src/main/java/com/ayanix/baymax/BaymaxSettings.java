@@ -29,6 +29,11 @@ public class BaymaxSettings
 		this.bot = bot;
 	}
 
+	/**
+	 * Loads settings from file, or inserts default settings.
+	 *
+	 * @return Whether or not the settings were successfully loaded.
+	 */
 	public boolean load()
 	{
 		String fullName = "settings.yml";
