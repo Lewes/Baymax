@@ -137,16 +137,9 @@ public class BaymaxSettings
 
 			List<String> names = parent.getStringList(rawRoleID);
 
-			// check by exact name first
-			if (names.stream().anyMatch(possibleName -> possibleName.equalsIgnoreCase(name)))
-			{
-				return Optional.of(role);
-			}
-
-			// check by containing
-			// minimum length of 5 letters to prevent random letters matching
-			if (names.stream().anyMatch(possibleName -> (name.length() >= 5 && possibleName.contains(name) ||
-					name.contains(possibleName))))
+			// check by exact name and by containing
+			if (names.stream().anyMatch(possibleName -> possibleName.equalsIgnoreCase(name) ||
+					(name.length() >= 5 && possibleName.contains(name) || name.contains(possibleName))))
 			{
 				return Optional.of(role);
 			}
