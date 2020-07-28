@@ -2,6 +2,9 @@ package com.ayanix.baymax;
 
 import lombok.Getter;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
  * Baymax - Developed by Lewes D. B. (Boomclaw).
  * All rights reserved 2020.
@@ -36,6 +39,8 @@ public class Baymax
 		}
 
 		loadStorage();
+
+		beginCountdown();
 
 		return true;
 	}
@@ -78,6 +83,21 @@ public class Baymax
 	{
 		this.storage = new BaymaxPersistentStorage(this);
 		storage.loadAllData();
+	}
+
+	/**
+	 * Begin countdown to results day.
+	 */
+	public void beginCountdown()
+	{
+		new Timer().schedule(new TimerTask()
+		{
+			@Override
+			public void run()
+			{
+				new BaymaxCountdown(Baymax.this).update();
+			}
+		}, 5000, 5000);
 	}
 
 }
