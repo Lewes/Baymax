@@ -1,6 +1,7 @@
 package com.ayanix.baymax;
 
 import com.ayanix.baymax.utils.MathsUtils;
+import com.ayanix.baymax.utils.StringUtils;
 import com.ayanix.panther.storage.configuration.Configuration;
 import com.ayanix.panther.storage.configuration.ConfigurationProvider;
 import com.ayanix.panther.storage.configuration.YamlConfiguration;
@@ -137,9 +138,26 @@ public class BaymaxSettings
 
 			List<String> names = parent.getStringList(rawRoleID);
 
-			// check by exact name and by containing
-			if (names.stream().anyMatch(possibleName -> possibleName.equalsIgnoreCase(name) ||
-					(name.length() >= 5 && possibleName.contains(name) || name.contains(possibleName))))
+			// check by exact name
+			if (StringUtils.isExactMatch(name, names))
+			{
+				return Optional.of(role);
+			}
+		}
+
+		for (String rawRoleID : parent.getKeys())
+		{
+			if (!MathsUtils.get().isLong(rawRoleID))
+			{
+				continue;
+			}
+
+			long role = Long.parseLong(rawRoleID);
+
+			List<String> names = parent.getStringList(rawRoleID);
+
+			// check by containing
+			if (StringUtils.isContainMatch(name, names))
 			{
 				return Optional.of(role);
 			}
