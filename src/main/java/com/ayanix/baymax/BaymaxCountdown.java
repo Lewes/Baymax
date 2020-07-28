@@ -85,7 +85,7 @@ public class BaymaxCountdown
 			                              "seconds"};
 			int accuracy = 0;
 
-			for (int i = 0; i < types.length && accuracy <= 3; ++i)
+			for (int i = 0; i < types.length && accuracy <= 2; ++i)
 			{
 				int diff = this.dateDiff(types[i], fromDate, toDate, future);
 				if (diff > 0)
