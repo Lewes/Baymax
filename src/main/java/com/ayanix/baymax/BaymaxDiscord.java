@@ -50,6 +50,11 @@ public class BaymaxDiscord
 	 */
 	public void registerListeners()
 	{
+		if (!bot.getSettings().isCommandsEnabled())
+		{
+			return;
+		}
+
 		client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(new RoleCommand(bot));
 		client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(new IntroductionCommand(bot));
 	}

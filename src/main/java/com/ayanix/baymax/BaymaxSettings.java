@@ -227,4 +227,12 @@ public class BaymaxSettings
 		return configuration.getLong("channels.introduction", 0);
 	}
 
+	/**
+	 * @return Whether or not commands are enabled.
+	 */
+	public boolean isCommandsEnabled()
+	{
+		return configuration.getBoolean("commands.enabled", true);
+	}
+
 }
