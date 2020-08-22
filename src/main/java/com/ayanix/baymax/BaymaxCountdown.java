@@ -32,7 +32,15 @@ public class BaymaxCountdown
 	 */
 	public void update()
 	{
-		bot.getDiscord().getClient().updatePresence(Presence.online(Activity.playing(getTimeTillResultsDay() + " till results day"))).subscribe();
+		long unixTime = System.currentTimeMillis() / 1000;
+
+		if (unixTime < getResultsTime())
+		{
+			bot.getDiscord().getClient().updatePresence(Presence.online(Activity.playing(getTimeTillResultsDay() + " till results day"))).subscribe();
+		} else if (unixTime < getMovingInTime())
+		{
+			bot.getDiscord().getClient().updatePresence(Presence.online(Activity.playing(getTimeTillMovingIn() + " till Southampton 2020"))).subscribe();
+		}
 	}
 
 	/**
@@ -40,7 +48,31 @@ public class BaymaxCountdown
 	 */
 	public String getTimeTillResultsDay()
 	{
-		return formatDateDiff(1597305600);
+		return formatDateDiff(getResultsTime());
+	}
+
+	/**
+	 * @return The UNIX time for results day.
+	 */
+	private long getResultsTime()
+	{
+		return 1597302000;
+	}
+
+	/**
+	 * @return The time till moving in (12am September 23rd 2020).
+	 */
+	public String getTimeTillMovingIn()
+	{
+		return formatDateDiff(getMovingInTime());
+	}
+
+	/**
+	 * @return The UNIX time for moving in.
+	 */
+	private long getMovingInTime()
+	{
+		return 1600815600;
 	}
 
 	/**
